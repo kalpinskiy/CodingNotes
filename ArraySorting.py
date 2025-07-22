@@ -49,6 +49,57 @@ class colourfulArray():
             print("There are no numbers available.")
             return None
         return self.array.pop()
+    def printAsHeap(self):
+        def printRow1(nums):
+            if not isinstance(nums, list):
+                nums = [nums]
+            row = ""
+            for n in range(len(nums)):
+                row += nums[n].toStr()
+                #row += "nnnnn"
+                row += "      "
+            print(row)
+        def printRow2(nums):
+            if not isinstance(nums, list):
+                nums = [nums]
+            #row = "xxxx"
+            row = "    "
+            for n in range(len(nums)):
+                row += nums[n].toStr()
+                #row += "xxxxxxxxxxxxx"
+                row += "             "
+            print(row)
+        def printRow3(nums):
+            if not isinstance(nums, list):
+                nums = [nums]
+            #row = "sssssssssssss"
+            row = "             "
+            for n in range(len(nums)):
+                row += nums[n].toStr()
+                #row += "sssssssssssssssssssssssssssss"
+                row += "                             "
+            print(row)
+        def printRow4(num):
+            row = "                            "
+            row += num.toStr()
+            print(row)
+        if len(self.array) == 1:
+            print(str(self.array[0]))
+        elif len(self.array) < 4:
+            printRow2(self.array[0])
+            printRow1(self.array[1:])
+        elif len(self.array) < 8:
+            printRow3(self.array[0])
+            printRow2(self.array[1:3])
+            printRow1(self.array[3:])
+        else:
+            printRow4(self.array[0])
+            printRow3(self.array[1:3])
+            printRow2(self.array[3:7])
+            printRow1(self.array[7:])
+        if len(self.array) > 15:
+            printRow1(self.array[15:])
+
 
 def bubbleSort(colArray):
     print("Bubble Sort for array: " + str(colArray))
@@ -164,6 +215,53 @@ def merge(left, right):
                 temp) + ") to the output: " + str(
                 output))
     return output
+
+
+def heapify(cArr, explain):
+    for i in range(len(cArr.array)):
+        if cArr.array[i].num > cArr.array[int((i-1)/2)].num:
+            j=i
+            while cArr.array[j].num > cArr.array[int((j-1)/2)].num:
+                if explain:
+                    print("As " + str(cArr.array[int((j - 1) / 2)]) + " is smaller than " + str(cArr.array[j]) + ", we need to swap them: ")
+                cArr.array[j], cArr.array[int((j-1)/2)] = cArr.array[int((j-1)/2)], cArr.array[j]
+                if explain:
+                    cArr.printAsHeap()
+                j = int((j-1)/2)
+def heapSort(cArr):
+    print("Heap Sort for array: " + str(cArr))
+    print("Time complexity: O(nlogn).")
+    n = len(cArr.array)
+    print("Let's picture our array as a heap:")
+    cArr.printAsHeap()
+    print("Now, let's make it into a proper heap.")
+    heapify(cArr, True)
+    print("Now, we'll remove the largest element and put, in its place, the last element: ")
+    endArr = colourfulArray([cArr.array[0]])
+    cArr.array[0] = cArr.array[len(cArr.array) - 1]
+    cArr.array = cArr.array[:len(cArr.array) - 1]
+    print("Array so far: " + str(endArr))
+    print("Heap now:")
+    cArr.printAsHeap()
+    print("Heapifying: ")
+    heapify(cArr, False)
+    cArr.printAsHeap()
+    while len(cArr.array) > 2:
+        print("We again remove the largest element and put, in its place, the last element: ")
+        endArr.array.insert(0, cArr.array[0])
+        cArr.array[0] = cArr.array[len(cArr.array) - 1]
+        cArr.array = cArr.array[:len(cArr.array) - 1]
+        print("Array so far: " + str(endArr))
+        print("Heap now:")
+        cArr.printAsHeap()
+        print("Heapifying: ")
+        heapify(cArr, False)
+        cArr.printAsHeap()
+    endArr.array.insert(0,cArr.array[0])
+    endArr.array.insert(0, cArr.array[1])
+    print("Heap now only has two elements, the largest at the top. We remove both and add them to the array.")
+    print("The sorted array is: " + str(endArr))
+
 
 
 def runProgram(cArr):
